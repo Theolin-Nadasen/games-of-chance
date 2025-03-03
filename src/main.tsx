@@ -51,7 +51,7 @@ Devvit.addCustomPostType({
 
     return (
       <vstack backgroundColor='black' height={100}>
-        {currentGame === "none" && <GameMenu onSelectGame={handleSelectGame}/>}
+        {currentGame === "none" && <GameMenu onSelectGame={handleSelectGame} context={_context}/>}
         {currentGame === "tictactoe" && <TicTacToe onBackToMenu={handleBackToMenu}/>}
         {currentGame === "coinflip" && <CoinFlip onBackToMenu={handleBackToMenu} context={_context}/>}
         {currentGame === "dice" && <Dice onBackToMenu={handleBackToMenu} context={_context}/>}

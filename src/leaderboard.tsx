@@ -38,8 +38,8 @@ function Leaderboard({ onBackToMenu, context }: { onBackToMenu: () => void, cont
     const topResults = Object.entries(results).slice(0, 10);  // Limit to 10 most recent results
 
     return (
-        <vstack>
-            <button onPress={fetchResults}>Load Leaderboard</button>
+        <vstack gap="medium" height={100} backgroundColor="black" alignment="center middle">
+            <button onPress={fetchResults}>Load Latest Results</button>
 
             
             {topResults.length > 0 ? (
