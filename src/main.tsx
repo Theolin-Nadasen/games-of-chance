@@ -1,5 +1,9 @@
 // Learn more at developers.reddit.com/docs
 import { Devvit, useState } from '@devvit/public-api';
+import GameMenu from './menu.js';
+import TicTacToe from './tiktactoe.js';
+import CoinFlip from './coinflip.js';
+import Dice from './dice.js';
 
 Devvit.configure({
   redditAPI: true,
@@ -33,23 +37,23 @@ Devvit.addMenuItem({
 Devvit.addCustomPostType({
   name: 'Experience Post',
   height: 'regular',
-  render: (_context) => {
-    const [counter, setCounter] = useState(0);
+  render: (_context) => {const [counter, setCounter] = useState(0);
+    const [currentGame, setGame] = useState("none");
+
+    function handleSelectGame(game : string) {
+      setGame(game);
+    } 
+
+    function handleBackToMenu(){
+      setGame("none");
+    }
 
     return (
-      <vstack height="100%" width="100%" gap="medium" alignment="center middle">
-        <image
-          url="logo.png"
-          description="logo"
-          imageHeight={256}
-          imageWidth={256}
-          height="48px"
-          width="48px"
-        />
-        <text size="large">{`Click counter: ${counter}`}</text>
-        <button appearance="primary" onPress={() => setCounter((counter) => counter + 1)}>
-          Click me!
-        </button>
+      <vstack backgroundColor='white' height={100}>
+        {currentGame === "none" && <GameMenu onSelectGame={handleSelectGame}/>}
+        {currentGame === "tictactoe" && <TicTacToe onBackToMenu={handleBackToMenu}/>}
+        {currentGame === "coinflip" && <CoinFlip onBackToMenu={handleBackToMenu}/>}
+        {currentGame === "dice" && <Dice onBackToMenu={handleBackToMenu}/>}
       </vstack>
     );
   },
