@@ -31,7 +31,7 @@ function Dice({onBackToMenu, context} : {onBackToMenu : () => void; context : De
             storeResult(context, context.userId || "someone", `rolled a ${firstResult} and a ${secondResult}`);
             setCanRoll(false); // stops the loading screen
         }
-    }, 2000)
+    }, 1000)
 
     const rollDice = () => {
         setIsRolling(true);

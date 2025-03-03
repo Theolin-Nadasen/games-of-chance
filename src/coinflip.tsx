@@ -24,7 +24,7 @@ function CoinFlip({onBackToMenu, context} : {onBackToMenu : () => void; context 
             setShouldFlip(false); // stops the loading screen from showing
         }
         
-    }, 2000);
+    }, 1000);
 
     const flipCoin = () => {
         setIsFlipping(true);
