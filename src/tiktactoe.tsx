@@ -66,12 +66,12 @@ function TicTacToe({onBackToMenu } : {onBackToMenu: () => void}) {
       <text size="xlarge">{status}</text>
       <hstack gap="medium">
         {[0, 1, 2].map((row) => (
-          <vstack key={row} gap="medium">
+          <vstack key={row.toString()} gap="medium">
             {[0, 1, 2].map((col) => {
               const index = row * 3 + col;
               return (
                 <button
-                  key={index}
+                  key={index.toString()}
                   onPress={() => handleClick(index)}
                   disabled={board[index] || winner}
                 >
