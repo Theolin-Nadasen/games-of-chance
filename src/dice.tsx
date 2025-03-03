@@ -1,8 +1,16 @@
-import { Devvit, useState } from "@devvit/public-api";
+import { Devvit, useInterval, useState } from "@devvit/public-api";
 
-function Dice({onBackToMenu} : {onBackToMenu : () => void}) {
+async function storeResult(context: Devvit.Context, username: string, result: string) {
+    const timestamp = Date.now();  // Get the current timestamp
+    await context.redis.hSet('game_results_1', { [username]: JSON.stringify({ result, timestamp }) });
+}
+
+function Dice({onBackToMenu, context} : {onBackToMenu : () => void; context : Devvit.Context}) {
     const [result1, setResult1] = useState(1)
     const [result2, setResult2] = useState(1)
+
+    const [isRolling, setIsRolling] = useState(false)
+    const [canRoll, setCanRoll] = useState(true)
 
     const diceImages : {[key : number] : string} = {
         1 : "one.png",
@@ -13,14 +21,30 @@ function Dice({onBackToMenu} : {onBackToMenu : () => void}) {
         6 : "six.png",
     }
 
+    const LoadingScreenTime = useInterval(() => {
+        if (canRoll){
+            setIsRolling(false);
+            const firstResult =  Math.floor(Math.random() * 6) + 1
+            setResult1(firstResult);
+            const secondResult =  Math.floor(Math.random() * 6) + 1
+            setResult2(secondResult);
+            storeResult(context, context.userId || "someone", `rolled a ${firstResult} and a ${secondResult}`);
+            setCanRoll(false); // stops the loading screen
+        }
+    }, 2000)
+
     const rollDice = () => {
-        setResult1(Math.floor(Math.random() * 6) + 1);
-        setResult2(Math.floor(Math.random() * 6) + 1);
+        setIsRolling(true);
+        setCanRoll(true); // allows the loading screen to run
+
+        LoadingScreenTime.start();
 
     }
 
     return (
         <vstack height={100} backgroundColor="black" gap="medium" alignment="center middle">
+            {isRolling ? (<text size="xxlarge" weight="bold">Rolling the dice...</text>) :
+            (<>
             <text size="xxlarge" weight="bold">Dice</text>
             <hstack>
                 <image
@@ -41,6 +65,7 @@ function Dice({onBackToMenu} : {onBackToMenu : () => void}) {
 
             <button onPress={rollDice}>Roll</button>
             <button onPress={onBackToMenu}>Back To Menu</button>
+            </>)}
         </vstack>
     )
 }

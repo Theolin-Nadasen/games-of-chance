@@ -7,6 +7,7 @@ function GameMenu({onSelectGame} : {onSelectGame : (game: string) => void}) {
           <button onPress={() => onSelectGame('tictactoe')}>Tic-Tac-Toe</button>
           <button onPress={() => onSelectGame('coinflip')}>Heads or Tails</button>
           <button onPress={() => onSelectGame('dice')}>Dice</button>
+          <button onPress={() => onSelectGame('Leaderboard')}>Leaderboard</button>
 
         </vstack>
       );

@@ -1,6 +1,11 @@
 import { Devvit, useInterval, useState } from "@devvit/public-api";
 
-function CoinFlip({onBackToMenu} : {onBackToMenu : () => void}){
+async function storeResult(context: Devvit.Context, username: string, result: string) {
+    const timestamp = Date.now();  // Get the current timestamp
+    await context.redis.hSet('game_results_1', { [username]: JSON.stringify({ result, timestamp }) });
+}
+
+function CoinFlip({onBackToMenu, context} : {onBackToMenu : () => void; context : Devvit.Context}){
     const [result, setResult] = useState("heads");
     const [isFlipping, setIsFlipping] = useState(false);
     const [shouldFlip, setShouldFlip] = useState(true);
@@ -14,6 +19,7 @@ function CoinFlip({onBackToMenu} : {onBackToMenu : () => void}){
         if(shouldFlip){
             setIsFlipping(false);
             const randomResult = Math.random() < 0.5 ? 'heads' : 'tails';
+            storeResult(context, context.userId || "someone", `flipped and got ${randomResult}`);
             setResult(randomResult);
             setShouldFlip(false); // stops the loading screen from showing
         }

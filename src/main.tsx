@@ -4,6 +4,7 @@ import GameMenu from './menu.js';
 import TicTacToe from './tiktactoe.js';
 import CoinFlip from './coinflip.js';
 import Dice from './dice.js';
+import Leaderboard from './Leaderboard.js';
 
 Devvit.configure({
   redditAPI: true,
@@ -52,8 +53,9 @@ Devvit.addCustomPostType({
       <vstack backgroundColor='black' height={100}>
         {currentGame === "none" && <GameMenu onSelectGame={handleSelectGame}/>}
         {currentGame === "tictactoe" && <TicTacToe onBackToMenu={handleBackToMenu}/>}
-        {currentGame === "coinflip" && <CoinFlip onBackToMenu={handleBackToMenu}/>}
-        {currentGame === "dice" && <Dice onBackToMenu={handleBackToMenu}/>}
+        {currentGame === "coinflip" && <CoinFlip onBackToMenu={handleBackToMenu} context={_context}/>}
+        {currentGame === "dice" && <Dice onBackToMenu={handleBackToMenu} context={_context}/>}
+        {currentGame === "Leaderboard" && <Leaderboard onBackToMenu={handleBackToMenu} context={_context}/>}
       </vstack>
     );
   },
