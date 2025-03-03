@@ -11,7 +11,7 @@ Devvit.configure({
 
 // Add a menu item to the subreddit menu for instantiating the new experience post
 Devvit.addMenuItem({
-  label: 'Add my post',
+  label: 'Add Games of Chance Post',
   location: 'subreddit',
   forUserType: 'moderator',
   onPress: async (_event, context) => {
@@ -20,7 +20,7 @@ Devvit.addMenuItem({
 
     const subreddit = await reddit.getCurrentSubreddit();
     const post = await reddit.submitPost({
-      title: 'My devvit post',
+      title: 'Games of Chance',
       subredditName: subreddit.name,
       // The preview appears while the post loads
       preview: (
@@ -49,7 +49,7 @@ Devvit.addCustomPostType({
     }
 
     return (
-      <vstack backgroundColor='white' height={100}>
+      <vstack backgroundColor='black' height={100}>
         {currentGame === "none" && <GameMenu onSelectGame={handleSelectGame}/>}
         {currentGame === "tictactoe" && <TicTacToe onBackToMenu={handleBackToMenu}/>}
         {currentGame === "coinflip" && <CoinFlip onBackToMenu={handleBackToMenu}/>}
