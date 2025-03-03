@@ -30,11 +30,10 @@ function Leaderboard({ onBackToMenu, context }: { onBackToMenu: () => void, cont
             return acc;
         }, {} as Record<string, string>);
 
-        setResults(resultsObj);  // Update the state with the sorted results
-        console.log("Fetched Sorted Results:", resultsObj);  // Check the sorted results
+        setResults(resultsObj);  
     };
 
-    // Convert results back to an array for rendering
+
     const topResults = Object.entries(results).slice(0, 10);  // Limit to 10 most recent results
 
     return (
