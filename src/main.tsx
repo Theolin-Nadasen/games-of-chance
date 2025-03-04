@@ -1,10 +1,10 @@
 // Learn more at developers.reddit.com/docs
-import { Devvit, useState } from '@devvit/public-api';
+import { Comment, Devvit, Listing, Post, Subreddit, useState } from '@devvit/public-api';
 import GameMenu from './menu.js';
 import TicTacToe from './tiktactoe.js';
 import CoinFlip from './coinflip.js';
 import Dice from './dice.js';
-import Leaderboard from './Leaderboard.js';
+import Leaderboard from './leaderboard.js';
 
 Devvit.configure({
   redditAPI: true,
@@ -14,7 +14,6 @@ Devvit.configure({
 Devvit.addMenuItem({
   label: 'Add Games of Chance Post',
   location: 'subreddit',
-  forUserType: 'moderator',
   onPress: async (_event, context) => {
     const { reddit, ui } = context;
     ui.showToast("Submitting your post - upon completion you'll navigate there.");
@@ -31,6 +30,34 @@ Devvit.addMenuItem({
       ),
     });
     ui.navigateTo(post);
+  },
+});
+
+//my scheduller for creating comments
+Devvit.addSchedulerJob({
+  name: 'AddComment',
+  onRun: async (event, context) => {
+    const subreddit = await context.reddit.getCurrentSubreddit();
+
+    // checks the latest post for the words "game" or "play" and leaves a comment instructing them on how to start the app
+    for (const post of await context.reddit.getNewPosts({ subredditName: subreddit.name, limit: 1, pageSize : 100 }).all()) {
+      if (post.title.includes('game') || post.title.includes("play") || post.body?.includes("game") || post.body.includes("play")) {
+        await post.addComment({ text : `u/${post.authorName} you can play games by clicking the 3 dots at the top of the sub and selecting 'Add Games Of Chance Post'`});
+      }
+    }
+  }
+});
+
+//my triegger for when someone makes a new post
+Devvit.addTrigger({
+  event: 'PostSubmit',
+  async onEvent(event, context) {
+
+    const Job = await context.scheduler.runJob({
+      name : "AddComment",
+      runAt : new Date(Date.now() + 5000) // runs after 5 seconds 
+    })
+
   },
 });
 
